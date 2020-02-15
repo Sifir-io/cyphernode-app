@@ -1,9 +1,9 @@
-# Sifir - Cypheronde App and UI
+# Sifir - Cyphernode App and UI
 
 Runs as a Cyphernode app to securley bridge communciation between Cyphernode and Sifir mobile wallet.
 
 ## :warning:  WARNING: ALPHA SOFTWARE :warning:
-Sifir is very much WIP and is meant for reckless Bitcoin maximalists looking for a badass mobile wallet.
+Sifir is very much WIP and is meant for reckless Bitcoin maximalists looking for a badass wallet. Normies comeback later please.
 
 ## Requirements
 - Docker
@@ -21,15 +21,18 @@ Sifir is very much WIP and is meant for reckless Bitcoin maximalists looking for
 ```
 4. run `./run.sh ~/cyphernode/dist/cyphernode/certs/cert.pem` replacing `~/cyphernode/dist/cyphernode/certs/cert.pem` with the path to Cyphernode's certifcate. Note: If you have installed Cyphernode under a special user different than the one you login to your system with you might want to the `cert.pem` file from cyphernode's folder to the folder sifir app is installed under and point to it to prevent having to use sudo to access every time you want to run Sifir.
 
-## Pairing phone with mobile wallet
+## Setuping Sifir and Pairing with mobile wallet
 
 1. Open your browser and head to 'http://localhost:3011'
-![Sifir app welcome](./docs/images/sifir-ui-welcome.png)
-2. Setup keys for your node.
-![Generate encryption keys](./docs/images/sifir-ui-keysgenerated.png)
-3. Download Sifir App [MAKE THIS A LINK]
-4. Scan the QR code with the Sifir App.
-![Generate encryption keys](./docs/images/sifir-ui-scan-qr.png)
-5. Enjoy an ananymous, private and secure Bitcoin wallet!
+2. Click on 'Setup Sifir'.
+3. Enter a password to encrypt your PGP keys with (PGP keys will be used to sign and encrypt all communication coming in and out of Sifir)
+4. Click on 'Make Keys'
+5. Wait for 'Keys generated' to appear, click continue, then 'Pair my phone'
+6. Select the node we're pairing with and re-enter your key password to unlock and activate your node.
+7. Select the method you would like to pair your phone with 'Tor' or 'Sifir Sync'
+8. Enter a *lowercase only* name for this device, and renter your password again. Click 'Show pairing QR code'
+9. Download Sifir's mobile App and scan the QR code !
+10. Enjoy an ananymous, private and secure Bitcoin wallet!
+![Sifir Setup and Pairing UI](./docs/images/sifir-ui-setup-pair-animated.gif)
 
 

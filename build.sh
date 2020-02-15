@@ -24,5 +24,9 @@ build_docker_images() {
 build_cn_app_ui
 build_docker_images
 
+# make sqllite data holding dirs
+mkdir -p ./sifir-cn-app/data/sqlite
+touch ./sifir-cn-app/data/sqlite/{db.dat,dev-db.dat}
+
 echo "Sifir Built !\n";
 echo "Edit docker-compose.yaml and add your cyphernode api keys then run ./run.sh";
