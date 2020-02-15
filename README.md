@@ -2,6 +2,9 @@
 
 Runs as a Cyphernode app to securley bridge communciation between Cyphernode and Sifir mobile wallet.
 
+~~~ WARNING: ALPHA SOFTWARE ~~~
+Sifir is very much WIP and is meant for reckless Bitcoin maximalists looking for a badass mobile wallet.
+
 ## Requirements
 - Docker
 - Cyphernode installed: https://github.com/SatoshiPortal/cyphernode
