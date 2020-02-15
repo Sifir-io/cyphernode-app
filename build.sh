@@ -23,3 +23,6 @@ build_docker_images() {
 
 build_cn_app_ui
 build_docker_images
+
+echo "Sifir Built !\n";
+echo "Edit docker-compose.yaml and add your cyphernode api keys then run ./run.sh";
