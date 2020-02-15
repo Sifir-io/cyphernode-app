@@ -1,5 +1,6 @@
 # Sifir - Cyphernode App and UI
-
+![Sifir Logo](logo_onLightBG_tealLogo_darkText.png)
+ 
 Runs as a Cyphernode app to securley bridge communciation between Cyphernode and Sifir mobile wallet.
 
 ## :warning:  WARNING: ALPHA SOFTWARE :warning:
@@ -11,7 +12,7 @@ Sifir is very much WIP and is meant for reckless Bitcoin maximalists looking for
 - Sifir Mobile App [LINK TO REPO] / Google play to pair your phone.
 
 ## Build and Setup Instructions
-1. Run `git clone https://github.com/Sifir-io/cyphernode-app.git`
+1. Run: `git clone https://github.com/Sifir-io/cyphernode-app.git`
 2. Run `cd <dir> & ./build`
 3. Edit `docker-compose.yaml` and change the following values to match your Cyphernode installation:
 ```
@@ -19,7 +20,7 @@ Sifir is very much WIP and is meant for reckless Bitcoin maximalists looking for
       - CYPHERNODE_API_KEY_ID=api key id from cyphernode
       - CYPHERNODE_ONION_URL=http://yourCyphernodeOnionUrl.onion
 ```
-4. run `./run.sh ~/cyphernode/dist/cyphernode/certs/cert.pem` replacing `~/cyphernode/dist/cyphernode/certs/cert.pem` with the path to Cyphernode's certifcate. 
+4. Run `./run.sh ~/cyphernode/dist/cyphernode/certs/cert.pem` replacing `~/cyphernode/dist/cyphernode/certs/cert.pem` with the path to Cyphernode's certifcate. 
 _Note:_ If you have installed Cyphernode under a special user different than the one you login to your system with you might want to the `cert.pem` file from cyphernode's folder to the folder sifir app is installed under and point to it to prevent having to use sudo to access every time you want to run Sifir.
 5. Open your browser and head on to 'https://localhost:3011' Sifir should load in your browser.
 
@@ -34,7 +35,7 @@ _Note:_ If you have installed Cyphernode under a special user different than the
 7. Select the method you would like to pair your phone with 'Tor' or 'Sifir Sync'
 8. Enter a *lowercase only* name for this device, and renter your password again. Click 'Show pairing QR code'
 9. Download Sifir's mobile App and scan the QR code !
-10. Enjoy an ananymous, private and secure Bitcoin wallet!
+10. Enjoy anonymous, private and badass UX :)
 ![Sifir Setup and Pairing UI](./docs/images/sifir-ui-setup-pair-animated.gif)
 
 
