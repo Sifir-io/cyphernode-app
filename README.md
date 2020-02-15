@@ -2,7 +2,7 @@
 
 Runs as a Cyphernode app to securley bridge communciation between Cyphernode and Sifir mobile wallet.
 
-~~~ WARNING: ALPHA SOFTWARE ~~~
+## :warning:  WARNING: ALPHA SOFTWARE :warning:
 Sifir is very much WIP and is meant for reckless Bitcoin maximalists looking for a badass mobile wallet.
 
 ## Requirements
