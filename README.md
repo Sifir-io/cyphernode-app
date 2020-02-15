@@ -1,5 +1,5 @@
 # Sifir - Cyphernode App and UI
-![Sifir Logo](logo_onLightBG_tealLogo_darkText.png)
+![Sifir Logo](./docs/images/logo_onLightBG_tealLogo_darkText.png)
  
 Runs as a Cyphernode app to securley bridge communciation between Cyphernode and Sifir mobile wallet.
 
