@@ -1,0 +1,50 @@
+<template>
+  <v-app>
+    <v-app-bar app dark>
+      <div class="d-flex align-center">
+        <router-link to="/">
+          <v-img
+            alt="Sifir.io logo"
+            class="shrink mr-2"
+            contain
+            src="./assets/logo_onDarkBG.png"
+            transition="scale-transition"
+            width="200"
+          />
+        </router-link>
+      </div>
+
+      <v-spacer></v-spacer>
+      <v-btn
+        href="https://github.com/vuetifyjs/vuetify/releases/latest"
+        target="_blank"
+        text
+      >
+        <span class="mr-2">Slack</span>
+        <v-icon>mdi-open-in-new</v-icon>
+      </v-btn>
+
+      <v-btn
+        href="https://github.com/vuetifyjs/vuetify/releases/latest"
+        target="_blank"
+        text
+      >
+        <span class="mr-2">Github</span>
+        <v-icon>mdi-open-in-new</v-icon>
+      </v-btn>
+    </v-app-bar>
+
+    <v-content>
+      <router-view></router-view>
+    </v-content>
+  </v-app>
+</template>
+
+<script>
+export default {
+  name: "App",
+  data: () => ({
+    //
+  })
+};
+</script>

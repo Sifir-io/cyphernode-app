@@ -1,0 +1,49 @@
+version: "3.6"
+
+services:
+  sifir-cyphernode-app:
+    image: sifir-cn-app:latest
+    command: npm start
+    ports:
+      - 3010
+      - 3009:3009
+    environment:
+      # ---------------------------------------------------------------------------------
+      # vvv--------- UPDATE THE FOLLOWING SETTINGS TO MATCHING YOU CN INSTALLATION ----vvv
+      #
+      ## Credentials: The cyphernode API key and key id you want Sifir to use
+      - CYPHERNODE_API_KEY=
+      - CYPHERNODE_API_KEY_ID=
+      ## Tor: The Tor v3 hostname for your CN installation
+      - CYPHERNODE_ONION_URL=
+      # 
+      # ^^^---------------------------------------------------------------------------^^^
+      # ---------------------------------------------------------------------------------
+      #
+      # ----- NO NEED TO EDIT VAIRABLES BELOW THIS LINE --------------
+      #
+      - CYPHERNODE_GATEKEEPER_CERT_CA=${CYPHERNODE_GATEKEEPER_CERT_CA}
+      - CYPHER_GATEWAY_URL=https://gatekeeper:2009/v0/
+      - SIFIR_APP_API_PORT=3009
+      - SIFIR_APP_TOR_BRIDGE_PORT=3010
+      - SIFIR_PAIRING_SERVER=https://pairing.sifir.io
+      - SIFIR_SYNAPSE_HOMESERVER=matrix.sifir.io
+      - SIFIR_SYNAPSE_HOMESERVER_URL=https://matrix.sifir.io
+      - SIFIR_SQLLITE_FILE=/data/sqlite/dev-db.dat
+      - SIFIR_API_PAIRING_KEY_EXPIRY=60000*5 # 5 mins expirty on pairing token
+      # - SIFIR_API_PAIRING_SECRET= # Generated at run time, or can be set statically here
+      - DEBUG=sifir*
+    volumes:
+      - ./data/:/data
+    labels:
+      - "traefik.docker.network=cyphernodeappsnet" 
+      - "traefik.frontend.rule=PathPrefixStrip: /sifir" 
+      - "traefik.frontend.passHostHeader=true" 
+      - "traefik.enable=true"
+      - "traefik.port=3010"
+      - "traefik.frontend.entryPoints=http"
+    networks: 
+      - cyphernodeappsnet
+networks:
+   cyphernodeappsnet:
+     external: true
