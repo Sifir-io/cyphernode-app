@@ -1,10 +1,10 @@
-# Sifir - Cyphernode App and UI
 ![Sifir Logo](./docs/images/logo_onLightBG_tealLogo_darkText.png)
- 
+
+# Cyphernode App and UI
 Runs as a Cyphernode app to securley bridge communciation between Cyphernode and Sifir mobile wallet.
 
 ## :warning:  WARNING: ALPHA SOFTWARE :warning:
-Sifir is very much WIP and is meant for reckless Bitcoin maximalists looking for a badass wallet. Normies comeback later please.
+Sifir is very much WIP and is meant for reckless Bitcoiners looking for a badass wallet. Plebs comeback later please.
 
 ## Requirements
 - Docker
