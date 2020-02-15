@@ -13,15 +13,17 @@ Sifir is very much WIP and is meant for reckless Bitcoin maximalists looking for
 ## Build and Setup Instructions
 1. Run `git clone https://github.com/Sifir-io/cyphernode-app.git`
 2. Run `cd <dir> & ./build`
-3. edit `docker-compose.yaml` and change the following values to match your Cyphernode installation:
+3. Edit `docker-compose.yaml` and change the following values to match your Cyphernode installation:
 ```
       - CYPHERNODE_API_KEY=api key from cyphernode
       - CYPHERNODE_API_KEY_ID=api key id from cyphernode
       - CYPHERNODE_ONION_URL=http://yourCyphernodeOnionUrl.onion
 ```
-4. run `./run.sh ~/cyphernode/dist/cyphernode/certs/cert.pem` replacing `~/cyphernode/dist/cyphernode/certs/cert.pem` with the path to Cyphernode's certifcate. Note: If you have installed Cyphernode under a special user different than the one you login to your system with you might want to the `cert.pem` file from cyphernode's folder to the folder sifir app is installed under and point to it to prevent having to use sudo to access every time you want to run Sifir.
+4. run `./run.sh ~/cyphernode/dist/cyphernode/certs/cert.pem` replacing `~/cyphernode/dist/cyphernode/certs/cert.pem` with the path to Cyphernode's certifcate. 
+_Note:_ If you have installed Cyphernode under a special user different than the one you login to your system with you might want to the `cert.pem` file from cyphernode's folder to the folder sifir app is installed under and point to it to prevent having to use sudo to access every time you want to run Sifir.
+5. Open your browser and head on to 'https://localhost:3011' Sifir should load in your browser.
 
-## Setuping Sifir and Pairing with mobile wallet
+## Sifir setup and Pairing with mobile wallet
 
 1. Open your browser and head to 'http://localhost:3011'
 2. Click on 'Setup Sifir'.
