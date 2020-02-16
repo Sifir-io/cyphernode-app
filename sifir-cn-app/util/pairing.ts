@@ -3,13 +3,13 @@ import _debug from "debug";
 import uuid from "uuid/v4";
 import { pairingEvents, msgTypes } from "../stores/constants/index";
 import { nodeStore as _nodeStore } from "../stores";
-const debug = _debug("sifif:pairing");
+const debug = _debug("sifir:pairing");
 const nodeStore = _nodeStore();
 const { hmacSHA256Hex } = cryptoUtils();
 import { randomBytes } from "crypto";
+const sessionSecret = randomBytes(64).toString("hex");
 const pairingUtil = ({
-  tokenSigningSecret = process.env.SIFIR_API_PAIRING_SECRET ||
-    randomBytes(64).toString("hex")
+  tokenSigningSecret = process.env.SIFIR_API_PAIRING_SECRET || sessionSecret
 } = {}) => {
   const parseSignedToken = async (
     token: any,

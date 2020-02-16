@@ -8,12 +8,12 @@ const debug_1 = __importDefault(require("debug"));
 const v4_1 = __importDefault(require("uuid/v4"));
 const index_1 = require("../stores/constants/index");
 const stores_1 = require("../stores");
-const debug = debug_1.default("sifif:pairing");
+const debug = debug_1.default("sifir:pairing");
 const nodeStore = stores_1.nodeStore();
 const { hmacSHA256Hex } = cyphernode_js_sdk_1.cryptoUtils();
 const crypto_1 = require("crypto");
-const pairingUtil = ({ tokenSigningSecret = process.env.SIFIR_API_PAIRING_SECRET ||
-    crypto_1.randomBytes(64).toString("hex") } = {}) => {
+const sessionSecret = crypto_1.randomBytes(64).toString("hex");
+const pairingUtil = ({ tokenSigningSecret = process.env.SIFIR_API_PAIRING_SECRET || sessionSecret } = {}) => {
     const parseSignedToken = async (token, key, tokenExpiry = process.env.SIFIR_API_PAIRING_KEY_EXPIRY || 30000) => {
         try {
             const { timestamp } = token;
