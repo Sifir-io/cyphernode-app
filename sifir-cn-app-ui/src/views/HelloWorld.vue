@@ -20,15 +20,41 @@
         </p>
       </v-flex>
 
+      <!-- nothing setup -->
       <template v-if="!nodes.length">
         <v-flex mb-5 xs12>
           Looks like you're on fresh install!
           <v-btn class="primary" to="/setup" large>Go to Setup</v-btn>
         </v-flex>
       </template>
+      <!-- Some nodes are setup but non are active-->
+      <template v-if="nodes.length && !unlockdeNodeDeviceId">
+        <node-unlock>
+          <template v-slot:actions="unlockSlot">
+            <v-alert
+              type="success"
+              v-if="unlockSlot.token && unlockSlot.unlockedNodeDeviceId"
+            >
+              {{ unlockSlot.unlockedNodeDeviceId }} unlocked and ready for
+              pairing
+              <v-btn
+                @click="
+                  setUnlockedPayload(
+                    unlockSlot.unlockedNodeDeviceId,
+                    unlockSlot.token
+                  )
+                "
+                >Continue</v-btn
+              >
+            </v-alert>
+          </template>
+        </node-unlock>
+      </template>
       <template v-else>
         <v-flex mb-5 xs12 v-if="nodes.length">
-          <h2 class="headline font-weight-bold mb-3">What's next?</h2>
+          <h2 class="headline font-weight-bold mb-3">
+            What's next?
+          </h2>
           <v-layout justify-center>
             <router-link
               v-for="(next, i) in appLinks"
@@ -61,10 +87,11 @@
 </template>
 
 <script>
+import NodeUnlock from "../components/NodeUnlock";
 import { mapState } from "vuex";
 export default {
   name: "HelloWorld",
-
+  components: { NodeUnlock },
   computed: {
     ...mapState({
       nodes: "nodes",
@@ -76,7 +103,7 @@ export default {
   data: () => ({
     appLinks: [
       {
-        text: "Setup Sifir",
+        text: "Setup new Keys",
         href: "/setup"
       },
       {

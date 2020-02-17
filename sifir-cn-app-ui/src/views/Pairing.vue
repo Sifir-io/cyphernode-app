@@ -35,15 +35,6 @@
             >
               {{ unlockSlot.unlockedNodeDeviceId }} unlocked and ready for
               pairing
-              <v-btn
-                @click="
-                  setUnlockedPayload(
-                    unlockSlot.unlockedNodeDeviceId,
-                    unlockSlot.token
-                  )
-                "
-                >Continue</v-btn
-              >
             </v-alert>
           </template>
         </node-unlock>
