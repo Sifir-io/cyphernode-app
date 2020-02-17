@@ -15,40 +15,47 @@
           Welcome to Sifir
         </h2>
         <p>
-          Thank you for downloading Sifir, if you need help just hit up the
-          Slack button on the top left and i'll be happy to help you :)
+          Thank you for downloading Sifir, if you need help just hit up the chat
+          button on the top left and i'll be happy to help you :)
         </p>
       </v-flex>
 
-      <v-flex mb-5 xs12>
-        <h2 class="headline font-weight-bold mb-3">What's next?</h2>
+      <template v-if="!nodes.length">
+        <v-flex mb-5 xs12>
+          Looks like you're on fresh install!
+          <v-btn class="primary" to="/setup" large>Go to Setup</v-btn>
+        </v-flex>
+      </template>
+      <template v-else>
+        <v-flex mb-5 xs12 v-if="nodes.length">
+          <h2 class="headline font-weight-bold mb-3">What's next?</h2>
+          <v-layout justify-center>
+            <router-link
+              v-for="(next, i) in appLinks"
+              :key="i"
+              :to="next.href"
+              class="subheading mx-3"
+            >
+              {{ next.text }}
+            </router-link>
+          </v-layout>
+        </v-flex>
+        <v-flex mb-5 xs12>
+          <h2 class="headline font-weight-bold mb-3">Imporant links</h2>
 
-        <v-layout justify-center>
-          <router-link
-            v-for="(next, i) in appLinks"
-            :key="i"
-            :to="next.href"
-            class="subheading mx-3"
-          >
-            {{ next.text }}
-          </router-link>
-        </v-layout>
-      </v-flex>
-      <v-flex mb-5 xs12>
-        <h2 class="headline font-weight-bold mb-3">Imporant links</h2>
-
-        <v-layout justify-center>
-          <a
-            v-for="(link, i) in importantLinks"
-            :key="i"
-            :href="link.href"
-            class="subheading mx-3"
-            target="_blank"
-          >
-            {{ link.text }}
-          </a>
-        </v-layout>
-      </v-flex>
+          <v-layout justify-center>
+            <a
+              v-for="(link, i) in importantLinks"
+              :key="i"
+              :href="link.href"
+              class="subheading mx-3"
+              target="_blank"
+            >
+              {{ link.text }}
+            </a>
+          </v-layout>
+        </v-flex>
+      </template>
     </v-layout>
   </v-container>
 </template>
@@ -60,6 +67,7 @@ export default {
 
   computed: {
     ...mapState({
+      nodes: "nodes",
       token: "token",
       unlockdeNodeDeviceId: "unlockedNodeDeviceId",
       unlocked: "unlocked"
@@ -72,7 +80,7 @@ export default {
         href: "/setup"
       },
       {
-        text: "Pair my Phone !",
+        text: "Pair a new Phone !",
         href: "/pairing"
       }
     ],

@@ -177,6 +177,8 @@
                   <v-card-actions class="justify-center">
                     <v-btn
                       class="primary"
+                      target="_blank"
+                      rel="noopener"
                       href="https://github.com/Sifir-io/sifir-mobile-wallet/releases"
                       >Download Sifir Apk for Android</v-btn
                     >

@@ -1,7 +1,7 @@
 <template>
   <v-card>
     <v-alert
-      v-if="unlockedNodeDeviceId && unlockedNodeDeviceId.length"
+      v-if="!publicKeyArmored && unlockedNodeDeviceId && unlockedNodeDeviceId.length"
       type="info"
       align="center"
       justify="center"

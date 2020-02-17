@@ -44,7 +44,9 @@ export default {
   mounted() {
     this.getNodeStatus();
   },
-  computed: { ...mapState(["token", "unlockedNodeDeviceId", "unlocked"]) },
+  computed: {
+    ...mapState(["token", "unlockedNodeDeviceId", "unlocked"])
+  },
   methods: { ...mapActions(["unlockNode", "getNodeStatus"]) },
   data: () => ({})
 };
