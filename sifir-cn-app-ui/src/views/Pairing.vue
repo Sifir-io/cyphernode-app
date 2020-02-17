@@ -4,23 +4,27 @@
       <v-flex xs12>
         <h1>Phone Pairing</h1>
       </v-flex>
-      <v-flex xs12 v-if="pairedDevices.length">
-        <v-data-table
-          v-model="tableSelectedDevice"
-          :headers="tableHeaders"
-          :items="pairedDevices"
-          :single-select="true"
-          item-key="pairingId"
-          show-select
-          class="elevation-1"
-        >
-        </v-data-table>
-      </v-flex>
-      <v-flex xs12 v-if="tableSelectedDevice">
-        <v-btn @click="togglePairingStatus"
-          >Enable/Disable pairing status</v-btn
-        >
-      </v-flex>
+      <template v-if="pairedDevices.length">
+        <v-flex xs12><h2>Devices Already Paired</h2></v-flex>
+        <v-flex xs12>
+          <v-data-table
+            v-model="tableSelectedDevice"
+            :headers="tableHeaders"
+            :items="pairedDevices"
+            :single-select="true"
+            item-key="pairingId"
+            show-select
+            class="elevation-1"
+          >
+          </v-data-table>
+        </v-flex>
+        <v-flex xs12 v-if="tableSelectedDevice">
+          <v-btn @click="togglePairingStatus"
+            >Enable/Disable pairing status</v-btn
+          >
+        </v-flex>
+      </template>
+      <v-flex xs12><h2>Pair a new device</h2></v-flex>
 
       <v-flex xs12 v-if="!unlockedNodeDeviceId || !token">
         <node-unlock>
@@ -250,14 +254,14 @@ export default {
     }
   },
   watch: {
-    token(nv) {
+    token(nv, ov) {
       const token = nv || undefined;
-      const unlockedNodeDeviceId = this.unlockedNodeDeviceId || undefined;
+      const nodeDeviceId = this.unlockedNodeDeviceId || undefined;
+      if (nv && !ov) this.getNodeStatus({ token, nodeDeviceId });
       if (nv.length) {
         if (this.pollInterval) clearInterval(this.pollInterval);
         this.pollInterval = setInterval(
-          () =>
-            this.getNodeStatus({ token, nodeDeviceId: unlockedNodeDeviceId }),
+          () => this.getNodeStatus({ token, nodeDeviceId }),
           3000
         );
       }
@@ -274,19 +278,10 @@ export default {
     }
     next();
   },
-  //async mounted() {
-  //  this.loading = true;
-  //  try {
-  //    await this.getNodeStatus();
-  //  } catch (err) {
-  //    console.error(err);
-  //  } finally {
-  //    this.loading = false;
-  //  }
-  //},
   methods: {
     ...mapActions(["getNodeStatus", "unlockNode"]),
     async togglePairingStatus() {
+      this.loading = true;
       try {
         if (!this.tableSelectedDevice) return;
         const [{ pairingId, status }] = this.tableSelectedDevice;
@@ -297,7 +292,11 @@ export default {
             pairingId,
             status: newStatus
           });
-      } catch (err) {}
+      } catch (err) {
+        this.error = err;
+      } finally {
+        this.loading = false;
+      }
     },
     nextStep(n) {
       switch (n) {

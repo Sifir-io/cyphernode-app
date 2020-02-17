@@ -51,9 +51,7 @@ export default new Vuex.Store({
       }
 
       if (pairedDevices) {
-        commit("setPairedDevices", {
-          pairedDevices
-        });
+        commit("setPairedDevices", pairedDevices);
       }
     },
     async unlockNode({ commit }, { keyPassphrase, nodeDeviceId }) {

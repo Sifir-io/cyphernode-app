@@ -13,7 +13,10 @@
     </v-card-subtitle>
     <v-alert
       v-if="
-        () => this.unlocked && this.unlockedNodeDeviceId !== this.nodeDeviceId
+        () =>
+          this.nodeDeviceId &&
+          this.unlocked &&
+          this.unlockedNodeDeviceId !== this.nodeDeviceId
       "
       color="yellow"
     >
