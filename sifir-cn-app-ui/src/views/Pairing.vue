@@ -167,8 +167,10 @@
                   </v-card-text>
                   <!-- <img :src="`data:image/png;base64,${pairingInfo}`" /> -->
                   <v-card-actions class="justify-center">
-                    <v-btn class="primary"
-                      >Download Sifir App for Android</v-btn
+                    <v-btn
+                      class="primary"
+                      href="https://github.com/Sifir-io/sifir-mobile-wallet/releases"
+                      >Download Sifir Apk for Android</v-btn
                     >
                   </v-card-actions>
                 </v-card>

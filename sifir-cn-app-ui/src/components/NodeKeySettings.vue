@@ -65,6 +65,7 @@
 
 <script>
 import superagent from "superagent";
+import { mapState, mapActions } from "vuex";
 export default {
   name: "NodeKeySettings",
   data: () => ({
@@ -73,12 +74,10 @@ export default {
     keyPassphraseConfirm: "",
     nodeDeviceId: "cyphernode1",
     error: null,
-    unlockedNodeDeviceId: null,
-    nodeDevices: null,
-    unlocked: false,
     publicKeyArmored: ""
   }),
   computed: {
+    ...mapState(["token", "unlockedNodeDeviceId", "unlocked", "nodes"]),
     valid() {
       return this.keyPassphrase.length > 6 && this.nodeDeviceId.length > 3;
     },
@@ -86,17 +85,8 @@ export default {
       return this.nodeId && this.pubkeyArmored;
     }
   },
-  async mounted() {
-    const {
-      body: { devices, unlockedNodeDeviceId }
-    } = await superagent.post(`http://localhost:3009/setup/status/`);
-
-    if (devices && unlockedNodeDeviceId) {
-      this.nodeDevices = devices;
-      this.unlockedNodeDeviceId = unlockedNodeDeviceId;
-    }
-  },
   methods: {
+    ...mapActions(["getNodeStatus", "unlockNode"]),
     async genKeys() {
       try {
         const { keyPassphrase, nodeDeviceId } = this;
@@ -108,16 +98,8 @@ export default {
           });
         const { publicKeyArmored } = keyGenBody;
         this.publicKeyArmored = publicKeyArmored;
-        const {
-          body: { unlocked }
-        } = await superagent
-          .post(`http://localhost:3009/setup/keys/unlock`)
-          .send({
-            keyPassphrase,
-            nodeDeviceId
-          });
-        if (unlocked !== true) this.error = "Error unlocking keys";
-        this.unlocked = true;
+        // Unlock the node right away for good ux
+        await this.unlockNode({ keyPassphrase, nodeDeviceId });
       } catch (error) {
         const {
           response: { body }

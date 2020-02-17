@@ -61,67 +61,24 @@
 </template>
 
 <script>
-import superagent from "superagent";
+import { mapState, mapActions, mapGetters } from "vuex";
 export default {
   name: "NodeUnlock",
   data: () => ({
     formValid: false,
     keyPassphrase: "",
     nodeDeviceId: "",
-    error: null,
-    unlockedNodeDeviceId: "",
-    nodes: null,
-    unlocked: false,
-    token: false
+    error: null
   }),
   computed: {
+    ...mapState(["token", "unlockedNodeDeviceId", "unlocked", "nodes"]),
+    ...mapGetters(["hasSetupNodes"]),
     valid() {
       return this.keyPassphrase.length > 6 && this.nodeDeviceId.length > 3;
-    },
-    hasSetupNodes() {
-      return this.nodes && this.nodes.length;
-    }
-  },
-  async mounted() {
-    const {
-      body: { devices, unlockedNodeDeviceId }
-    } = await superagent.post(`http://localhost:3009/setup/status/`).send({
-      nodeDeviceId: this.nodeDeviceId || undefined,
-      token: this.token || undefined
-    });
-
-    if (devices) {
-      this.nodes = devices;
-    }
-
-    if (unlockedNodeDeviceId) {
-      this.unlockedNodeDeviceId = unlockedNodeDeviceId;
-      this.unlocked = true;
     }
   },
   methods: {
-    async unlockNode() {
-      try {
-        const { keyPassphrase, nodeDeviceId } = this;
-        const {
-          body: { unlocked, token }
-        } = await superagent
-          .post(`http://localhost:3009/setup/keys/unlock`)
-          .send({
-            keyPassphrase,
-            nodeDeviceId
-          });
-        if (unlocked !== true) this.error = "Error unlocking keys";
-        this.unlocked = true;
-        this.token = token;
-      } catch (error) {
-        const {
-          response: { body }
-        } = error;
-        const { err } = body;
-        this.error = err || error;
-      }
-    }
+    ...mapActions(["unlockNode"])
   }
 };
 </script>

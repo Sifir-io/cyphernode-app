@@ -14,7 +14,10 @@
         <h2 class="display-2 font-weight-bold mb-3">
           Welcome to Sifir
         </h2>
-        <p>Thank you for downloading Sifir, if you need help just hit up the Slack button on the top left and i'll be happy to help you :)</p>
+        <p>
+          Thank you for downloading Sifir, if you need help just hit up the
+          Slack button on the top left and i'll be happy to help you :)
+        </p>
       </v-flex>
 
       <v-flex mb-5 xs12>
@@ -51,9 +54,20 @@
 </template>
 
 <script>
+import { mapState } from "vuex";
 export default {
   name: "HelloWorld",
 
+  computed: {
+    ...mapState({
+      token: "token",
+      unlockdeNodeDeviceId: "unlockedNodeDeviceId",
+      unlocked: "unlocked",
+      appLinks: state => { 
+	const links = [];
+      }
+    })
+  },
   data: () => ({
     appLinks: [
       {
