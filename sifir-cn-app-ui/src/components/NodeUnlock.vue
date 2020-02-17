@@ -12,7 +12,9 @@
       processing incoming requests.
     </v-card-subtitle>
     <v-alert
-      v-if="nodeDeviceId && unlockedNodeDeviceId !== nodeDeviceId"
+      v-if="
+        () => this.unlocked && this.unlockedNodeDeviceId !== this.nodeDeviceId
+      "
       color="yellow"
     >
       <b>Attention</b>: Node `{{ unlockedNodeDeviceId }}` is currently active
@@ -78,7 +80,19 @@ export default {
     }
   },
   methods: {
-    ...mapActions(["unlockNode"])
+    ...mapActions({
+      async unlockNode(dispatch) {
+        try {
+          await dispatch("unlockNode", {
+            keyPassphrase: this.keyPassphrase,
+            nodeDeviceId: this.nodeDeviceId
+          });
+        } catch (err) {
+          this.error =
+            "Error unlocking node most likley password or connectivity issue";
+        }
+      }
+    })
   }
 };
 </script>

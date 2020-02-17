@@ -46,7 +46,7 @@
 <script>
 import NodeKeySettings from "../components/NodeKeySettings";
 export default {
-  name: "HelloWorld",
+  name: "Setup",
   components: { NodeKeySettings },
   data: () => ({
     e1: 1,

@@ -8,9 +8,13 @@ export default new Vuex.Store({
     token: "",
     nodes: [],
     unlocked: false,
-    unlockedNodeDeviceId: ""
+    unlockedNodeDeviceId: "",
+    pairedDevices: []
   },
   mutations: {
+    setPairedDevices(state, pairedDevices) {
+      state.pairedDevices = pairedDevices;
+    },
     setToken(state, token) {
       state.token = token;
     },
@@ -29,7 +33,7 @@ export default new Vuex.Store({
       { token = null, nodeDeviceId = null } = {}
     ) {
       const {
-        body: { devices, unlockedNodeDeviceId }
+        body: { pairedDevices, devices, unlockedNodeDeviceId }
       } = await agent.post(`http://localhost:3009/setup/status/`).send({
         nodeDeviceId: nodeDeviceId || undefined,
         token: token || undefined
@@ -43,6 +47,12 @@ export default new Vuex.Store({
         commit("setUnlocked", {
           unlockedStatus: true,
           unlockedNodeDeviceId
+        });
+      }
+
+      if (pairedDevices) {
+        commit("setPairedDevices", {
+          pairedDevices
         });
       }
     },
@@ -62,8 +72,8 @@ export default new Vuex.Store({
     }
   },
   getters: {
-    hasSetupNodes() {
-      return this.nodes && this.nodes.length;
+    hasSetupNodes(state) {
+      return state.nodes && state.nodes.length;
     }
   }
 });

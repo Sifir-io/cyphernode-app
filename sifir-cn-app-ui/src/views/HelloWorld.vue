@@ -62,10 +62,7 @@ export default {
     ...mapState({
       token: "token",
       unlockdeNodeDeviceId: "unlockedNodeDeviceId",
-      unlocked: "unlocked",
-      appLinks: state => { 
-	const links = [];
-      }
+      unlocked: "unlocked"
     })
   },
   data: () => ({
