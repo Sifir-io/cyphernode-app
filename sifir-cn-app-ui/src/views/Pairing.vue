@@ -31,7 +31,7 @@
           <template v-slot:actions="unlockSlot">
             <v-alert
               type="success"
-              v-if="unlockSlot.token && unlockSlot.unlockedNodeDeviceId"
+              v-if="unlockSlot.unlocked && unlockSlot.unlockedNodeDeviceId"
             >
               {{ unlockSlot.unlockedNodeDeviceId }} unlocked and ready for
               pairing

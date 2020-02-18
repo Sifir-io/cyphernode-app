@@ -63,7 +63,7 @@ export default new Vuex.Store({
       });
       if (unlocked !== true) throw "Error unlocking keys";
       commit("setUnlocked", {
-        unlocked: true,
+        unlockedStatus: true,
         unlockedNodeDeviceId: nodeDeviceId
       });
       commit("setToken", token);

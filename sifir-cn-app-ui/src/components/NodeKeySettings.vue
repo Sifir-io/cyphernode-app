@@ -1,7 +1,9 @@
 <template>
   <v-card>
     <v-alert
-      v-if="!publicKeyArmored && unlockedNodeDeviceId && unlockedNodeDeviceId.length"
+      v-if="
+        !publicKeyArmored && unlockedNodeDeviceId && unlockedNodeDeviceId.length
+      "
       type="info"
       align="center"
       justify="center"
@@ -57,6 +59,7 @@
         name="actions"
         :unlocked="unlocked"
         :publicKeyArmored="publicKeyArmored"
+        :unlockedNodeDeviceId="unlockedNodeDeviceId"
       >
       </slot>
     </v-card-actions>

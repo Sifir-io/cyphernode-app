@@ -20,10 +20,10 @@
                   <v-btn
                     v-if="keySlot.publicKeyArmored"
                     class="primary"
-                    @click="nextStep(2)"
+                    to="pairing/"
                     :disabled="!keySlot.unlocked"
                   >
-                    Keys generated! Continue
+                    Keys generated. Click to continue to pairing!
                   </v-btn>
                 </template>
               </node-key-settings>

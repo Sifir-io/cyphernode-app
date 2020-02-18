@@ -24,6 +24,8 @@
       <template v-if="!nodes.length">
         <v-flex mb-5 xs12>
           Looks like you're on fresh install!
+        </v-flex>
+        <v-flex xs12>
           <v-btn class="primary" to="/setup" large>Go to Setup</v-btn>
         </v-flex>
       </template>
@@ -50,8 +52,8 @@
           </template>
         </node-unlock>
       </template>
-      <template v-else>
-        <v-flex mb-5 xs12 v-if="nodes.length">
+      <template v-if="nodes.length">
+        <v-flex mb-5 xs12>
           <h2 class="headline font-weight-bold mb-3">
             What's next?
           </h2>
