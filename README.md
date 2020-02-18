@@ -14,7 +14,7 @@ Sifir is very much WIP and is meant for reckless Bitcoiners looking for a badass
 ## Build and Setup Instructions
 1. Run: `git clone https://github.com/Sifir-io/cyphernode-app.git`
 2. Run `cd cyphernode-app && ./build.sh`
-3. Edit `.env` file created by and change the following values to match your Cyphernode installation:
+3. Edit `.env` file with your favorite text editor (IE Vime) and change the following values to match your Cyphernode installation:
 ```
       - CYPHERNODE_API_KEY=api key from cyphernode
       - CYPHERNODE_API_KEY_ID=api key id from cyphernode
