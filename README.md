@@ -9,7 +9,7 @@ Sifir is very much WIP and is meant for reckless Bitcoiners looking for a badass
 ## Requirements
 - Docker
 - Cyphernode installed: https://github.com/SatoshiPortal/cyphernode
-- Sifir Mobile App [LINK TO REPO] / Google play to pair your phone.
+- [Sifir Bitcoin Mobile Wallet Apk](https://github.com/Sifir-io/sifir-mobile-wallet/releases) OR Google play (Coming soon) to pair your phone.
 
 ## Build and Setup Instructions
 1. Run: `git clone https://github.com/Sifir-io/cyphernode-app.git`
