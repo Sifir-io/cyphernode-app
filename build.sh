@@ -21,12 +21,40 @@ build_docker_images() {
   && docker build sifir-cn-app/ -t sifir/cn-app:$SIFIR_CN_APP_VERSION 
 }
 
+
+setup_sqllite() {
+# make sqllite data holding dirs
+   if [[ -f ./sifir-cn-app/data/sqlite/db.dat ]]; then
+   	echo "Detected DB already exists, will skip creating it!";
+   	echo "Note: If you want to flush/delete your DB run the following command:\necho '' > ./sifir-cn-app/data/sqlite/db.dat"
+   else
+   	echo "Creating SQL lite db files.."
+   	mkdir -p ./sifir-cn-app/data/sqlite
+   	touch ./sifir-cn-app/data/sqlite/{db.dat,dev-db.dat}
+   fi
+}
+
+setup_creds_env_file() {
+cat <<- HERE > .env
+# ----------------------------------------------------------------------------------
+# vvv--------- UPDATE THE FOLLOWING SETTINGS TO MATCHING YOU CN INSTALLATION ----vvv
+#
+# TODO: These should be provided by CN apps frame work as env variables. Would make a zero config installation :)
+#
+# Credentials: The cyphernode API key and key id you want Sifir to use
+#
+CYPHERNODE_API_KEY=
+CYPHERNODE_API_KEY_ID=
+CYPHERNODE_ONION_URL=
+#
+# ^^^ -----------------------------------------------------------------------------
+# ^^^ -----------------------------------------------------------------------------
+HERE
+}
+
 build_cn_app_ui
 build_docker_images
-
-# make sqllite data holding dirs
-mkdir -p ./sifir-cn-app/data/sqlite
-touch ./sifir-cn-app/data/sqlite/{db.dat,dev-db.dat}
-
+setup_sqllite
+setup_creds_env_file
 echo "Sifir Built !\n";
-echo "Edit docker-compose.yaml and add your cyphernode api keys then run ./run.sh";
+echo "Edit .env file with your cyphernode api keys then run ./run.sh";

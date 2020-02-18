@@ -37,10 +37,17 @@
 </template>
 
 <script>
+import { mapState, mapActions } from "vuex";
+
 export default {
   name: "App",
-  data: () => ({
-    //
-  })
+  mounted() {
+    this.getNodeStatus();
+  },
+  computed: {
+    ...mapState(["token", "unlockedNodeDeviceId", "unlocked"])
+  },
+  methods: { ...mapActions(["unlockNode", "getNodeStatus"]) },
+  data: () => ({})
 };
 </script>

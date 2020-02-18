@@ -20,10 +20,10 @@
                   <v-btn
                     v-if="keySlot.publicKeyArmored"
                     class="primary"
-                    @click="nextStep(2)"
+                    to="pairing/"
                     :disabled="!keySlot.unlocked"
                   >
-                    Keys generated! Continue
+                    Keys generated. Click to continue to pairing!
                   </v-btn>
                 </template>
               </node-key-settings>
@@ -46,7 +46,7 @@
 <script>
 import NodeKeySettings from "../components/NodeKeySettings";
 export default {
-  name: "HelloWorld",
+  name: "Setup",
   components: { NodeKeySettings },
   data: () => ({
     e1: 1,

@@ -4,38 +4,37 @@
       <v-flex xs12>
         <h1>Phone Pairing</h1>
       </v-flex>
-      <v-flex xs12 v-if="pairedDevices.length">
-        <v-data-table
-          v-model="tableSelectedDevice"
-          :headers="tableHeaders"
-          :items="pairedDevices"
-          :single-select="true"
-          item-key="pairingId"
-          show-select
-          class="elevation-1"
-        >
-        </v-data-table>
-      </v-flex>
-      <v-flex xs12 v-if="tableSelectedDevice">
-        <v-btn @click="togglePairingStatus"
-          >Enable/Disable pairing status</v-btn
-        >
-      </v-flex>
+      <template v-if="pairedDevices.length">
+        <v-flex xs12><h2>Devices Already Paired</h2></v-flex>
+        <v-flex xs12>
+          <v-data-table
+            v-model="tableSelectedDevice"
+            :headers="tableHeaders"
+            :items="pairedDevices"
+            :single-select="true"
+            item-key="pairingId"
+            show-select
+            class="elevation-1"
+          >
+          </v-data-table>
+        </v-flex>
+        <v-flex xs12 v-if="tableSelectedDevice">
+          <v-btn @click="togglePairingStatus"
+            >Enable/Disable pairing status</v-btn
+          >
+        </v-flex>
+      </template>
+      <v-flex xs12><h2>Pair a new device</h2></v-flex>
 
-      <v-flex xs12 v-if="!nodeDeviceId || !token">
+      <v-flex xs12 v-if="!unlockedNodeDeviceId || !token">
         <node-unlock>
           <template v-slot:actions="unlockSlot">
             <v-alert
               type="success"
-              v-if="unlockSlot.token && unlockSlot.nodeDeviceId"
+              v-if="unlockSlot.unlocked && unlockSlot.unlockedNodeDeviceId"
             >
-              {{ unlockSlot.nodeDeviceId }} unlocked and ready for pairing
-              <v-btn
-                @click="
-                  setUnlockedPayload(unlockSlot.nodeDeviceId, unlockSlot.token)
-                "
-                >Continue</v-btn
-              >
+              {{ unlockSlot.unlockedNodeDeviceId }} unlocked and ready for
+              pairing
             </v-alert>
           </template>
         </node-unlock>
@@ -44,7 +43,7 @@
         <v-stepper v-model="e1">
           <v-stepper-header>
             <v-stepper-step step="1">
-              How do you want to connect to {{ nodeDeviceId }} ?
+              How do you want to connect to {{ unlockedNodeDeviceId }} ?
             </v-stepper-step>
             <v-stepper-step step="2">Scan Pairing QR</v-stepper-step>
           </v-stepper-header>
@@ -53,7 +52,7 @@
             <v-stepper-content step="1">
               <v-layout row wrap>
                 <v-flex md6 xs12>
-                  <v-card v-if="nodeDeviceId" flat>
+                  <v-card v-if="unlockedNodeDeviceId" flat>
                     <v-card-title>A. Select a connector </v-card-title>
                     <v-card-text>
                       Sifir allows you to pair your phone using Tor or Sifir
@@ -100,12 +99,12 @@
                         selectedConnector.charAt(0).toUpperCase() +
                           selectedConnector.slice(1)
                       }}
-                      `{{ nodeDeviceId }}` Pairing</v-card-title
+                      `{{ unlockedNodeDeviceId }}` Pairing</v-card-title
                     >
                     <v-card-subtitle> </v-card-subtitle>
                     <v-card-text>
                       Enter a unique name to recgonize this device by followed
-                      by {{ nodeDeviceId }} key's password to confirm
+                      by {{ unlockedNodeDeviceId }} key's password to confirm
                     </v-card-text>
                     <v-alert v-if="error" color="red">
                       {{ error }}
@@ -119,7 +118,7 @@
                       ></v-text-field>
                       <v-text-field
                         v-model="keyPassphrase"
-                        :label="`Enter ${nodeDeviceId} keys password`"
+                        :label="`Enter ${unlockedNodeDeviceId} keys password`"
                         :rules="[this.keyPassphrase.length > 6]"
                         required
                         type="password"
@@ -167,8 +166,12 @@
                   </v-card-text>
                   <!-- <img :src="`data:image/png;base64,${pairingInfo}`" /> -->
                   <v-card-actions class="justify-center">
-                    <v-btn class="primary"
-                      >Download Sifir App for Android</v-btn
+                    <v-btn
+                      class="primary"
+                      target="_blank"
+                      rel="noopener"
+                      href="https://github.com/Sifir-io/sifir-mobile-wallet/releases"
+                      >Download Sifir Apk for Android</v-btn
                     >
                   </v-card-actions>
                 </v-card>
@@ -196,6 +199,7 @@
 import superagent from "superagent";
 import QrcodeVue from "qrcode.vue";
 import NodeUnlock from "../components/NodeUnlock";
+import { mapState, mapActions } from "vuex";
 export default {
   name: "Pairing",
   components: { NodeUnlock, QrcodeVue },
@@ -204,13 +208,10 @@ export default {
     steps: 3,
     selectedConnector: "",
     keyPassphrase: "",
-    nodeDeviceId: null,
     deviceId: "",
     formValid: false,
     pairingInfo: null,
     error: null,
-    token: "",
-    pairedDevices: [],
     pollInterval: null,
     loading: false,
     tableHeaders: [
@@ -223,6 +224,13 @@ export default {
     tableSelectedDevice: null
   }),
   computed: {
+    ...mapState([
+      "token",
+      "pairedDevices",
+      "unlockedNodeDeviceId",
+      "unlocked",
+      "nodes"
+    ]),
     valid() {
       return this.keyPassphrase.length > 6 && this.deviceId.length > 3;
     },
@@ -240,11 +248,15 @@ export default {
   },
   watch: {
     token(nv, ov) {
-      // if we just got a token get it
-      if (!ov && nv) this.getSetupStatus();
+      const token = nv || undefined;
+      const nodeDeviceId = this.unlockedNodeDeviceId || undefined;
+      if (nv && !ov) this.getNodeStatus({ token, nodeDeviceId });
       if (nv.length) {
         if (this.pollInterval) clearInterval(this.pollInterval);
-        this.pollInterval = setInterval(() => this.getSetupStatus(), 3000);
+        this.pollInterval = setInterval(
+          () => this.getNodeStatus({ token, nodeDeviceId }),
+          3000
+        );
       }
     }
   },
@@ -259,19 +271,10 @@ export default {
     }
     next();
   },
-  async mounted() {
-    this.loading = true;
-    try {
-      await this.getSetupStatus();
-    } catch (err) {
-      console.error(err);
-    } finally {
-      this.loading = false;
-    }
-  },
-
   methods: {
+    ...mapActions(["getNodeStatus", "unlockNode"]),
     async togglePairingStatus() {
+      this.loading = true;
       try {
         if (!this.tableSelectedDevice) return;
         const [{ pairingId, status }] = this.tableSelectedDevice;
@@ -282,26 +285,10 @@ export default {
             pairingId,
             status: newStatus
           });
-      } catch (err) {}
-    },
-    async getSetupStatus() {
-      const {
-        body: { pairedDevices, unlockedNodeDeviceId }
-      } = await superagent.post(`http://localhost:3009/setup/status/`).send({
-        nodeDeviceId: this.nodeDeviceId || undefined,
-        token: this.token || undefined
-      });
-
-      if (unlockedNodeDeviceId) {
-        this.unlockedNodeDeviceId = unlockedNodeDeviceId;
-        this.unlocked = true;
-      }
-
-      if (unlockedNodeDeviceId) {
-        this.setNodeDeviceId(unlockedNodeDeviceId);
-      }
-      if (pairedDevices) {
-        this.pairedDevices = pairedDevices;
+      } catch (err) {
+        this.error = err;
+      } finally {
+        this.loading = false;
       }
     },
     nextStep(n) {
@@ -314,29 +301,24 @@ export default {
       }
       this.e1 = n;
     },
-    setUnlockedPayload(nodeDeviceId, token) {
-      this.setToken(token);
-      this.setNodeDeviceId(nodeDeviceId);
-    },
     // TODO move this to store
-    setToken(token) {
-      this.token = token;
-    },
-    setNodeDeviceId(nodeDeviceId) {
-      this.nodeDeviceId = nodeDeviceId;
-    },
     selectConnector(connector) {
       this.selectedConnector = connector;
     },
     async getPairingQr() {
       this.loading = true;
-      const { selectedConnector, keyPassphrase, nodeDeviceId, deviceId } = this;
+      const {
+        selectedConnector,
+        keyPassphrase,
+        unlockedNodeDeviceId,
+        deviceId
+      } = this;
       // register keys with sifir server
       if (selectedConnector == "matrix") {
         try {
           await superagent.post(`http://localhost:3009/setup/sifir/user`).send({
             keyPassphrase,
-            nodeDeviceId
+            nodeDeviceId: unlockedNodeDeviceId
           });
           // TODO hack job to give sifir node time to intiiliaze matrix client
           // make this into an event
@@ -353,7 +335,7 @@ export default {
           .post(`http://localhost:3009/pair/start/${selectedConnector}/json`)
           .send({
             keyPassphrase,
-            nodeDeviceId,
+            nodeDeviceId: unlockedNodeDeviceId,
             deviceId
           });
         this.pairingInfo = b64token;

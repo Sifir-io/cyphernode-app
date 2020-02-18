@@ -13,20 +13,10 @@ services:
       - 3009:3009
       - 3010
     environment:
-      # ---------------------------------------------------------------------------------
-      # vvv--------- UPDATE THE FOLLOWING SETTINGS TO MATCHING YOU CN INSTALLATION ----vvv
-      # TODO: These should be provided by CN apps frame work as env variables. Would make a zero config installation :)
-      ## Credentials: The cyphernode API key and key id you want Sifir to use
-      - CYPHERNODE_API_KEY=
-      - CYPHERNODE_API_KEY_ID=
-      ## Tor: The Tor v3 hostname for your CN installation
-      - CYPHERNODE_ONION_URL=
-      # 
-      # ^^^---------------------------------------------------------------------------^^^
-      # ---------------------------------------------------------------------------------
-      #
-      # ----- NO NEED TO EDIT VAIRABLES BELOW THIS LINE --------------
-      #
+      # ---- NO NEED TO EDIT ENV VARIABLES HERE, use .env file instead #
+      - CYPHERNODE_API_KEY=${CYPHERNODE_API_KEY}
+      - CYPHERNODE_API_KEY_ID=${CYPHERNNODE_API_KEY_ID}
+      - CYPHERNODE_ONION_URL=${CYPHERNODE_ONION_URL}
       - CYPHERNODE_GATEKEEPER_CERT_CA=${CYPHERNODE_GATEKEEPER_CERT_CA}
       - CYPHER_GATEWAY_URL=https://gatekeeper:2009/v0/
       - SIFIR_APP_API_PORT=3009
