@@ -14,9 +14,7 @@
     <v-alert
       v-if="
         () =>
-          this.nodeDeviceId &&
-          this.unlocked &&
-          this.unlockedNodeDeviceId !== this.nodeDeviceId
+          nodeDeviceId && unlocked && unlockedNodeDeviceId !== this.nodeDeviceId
       "
       color="yellow"
     >

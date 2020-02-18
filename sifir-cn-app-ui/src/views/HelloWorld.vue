@@ -113,13 +113,12 @@ export default {
     ],
     importantLinks: [
       {
-        text: "Cyphernode",
-        href: "https://github.com/SatoshiPortal/cyphernode"
+        text: "Sifir.io Chat and Support",
+        href: "https://chat.sifir.io"
       },
       {
-        text: "Sifir Slack",
-        href:
-          "https://join.slack.com/t/sifirio/shared_invite/enQtODY4MDI5MDM3ODI0LTIwNjEyOGViZmU2MTBjZjAyMTA0NzY0OGIzZTIzZDQ1Y2E5YzY0MzcyYmU3ODU0Y2YwNzU2Njc4M2JmZmJhMmI"
+        text: "Cyphernode Github",
+        href: "https://github.com/SatoshiPortal/cyphernode"
       }
     ]
   })
