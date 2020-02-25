@@ -62,7 +62,9 @@ const sifirMsgMiddlware = ({
     const eventSender = event.getSender();
     const { body } = event.getContent();
     const { encryptedData, signature } = JSON.parse(body);
-    const decryptedBody = await decryptContent(encryptedData);
+    const decryptedBody = await decryptContent(
+      Buffer.from(encryptedData, "base64").toString("utf8")
+    );
     log("sucessfully decrypted event", decryptedBody, signature);
     const { fingerprint, nonce, ...rest } = JSON.parse(decryptedBody);
     const { deviceId, pubKey } =
@@ -75,7 +77,11 @@ const sifirMsgMiddlware = ({
     if (deviceId && pubKey) {
       lru.set(nonce, { deviceId, pubKey, fingerprint, eventSender });
       const devicePubkey = await pgpUtil.getPrimarykeyFromArmored(pubKey);
-      isValidSign = await checkSign(decryptedBody, devicePubkey, signature);
+      isValidSign = await checkSign(
+        decryptedBody,
+        devicePubkey,
+        Buffer.from(signature, "base64").toString("utf8")
+      );
       log(`found paired pubkey for fingerprint with deviceId ${deviceId}`);
     }
     return { ...rest, nonce, deviceId, isValidSign };
@@ -104,7 +110,10 @@ const sifirMsgMiddlware = ({
     return {
       deviceId,
       eventSender,
-      body: JSON.stringify({ encryptedData, signature })
+      body: JSON.stringify({
+        encryptedData: Buffer.from(encryptedData, "utf8").toString("base64"),
+        signature: Buffer.from(signature, "utf8").toString("base64")
+      })
     };
   };
   // TODO LRU cache keys by fingerprint
