@@ -35,6 +35,9 @@ setup_sqllite() {
 }
 
 setup_creds_env_file() {
+if [[ -f ./.env ]]; then
+  echo "Detected .env file already exists, will skip creating it!";
+else
 cat <<- HERE > .env
 # ----------------------------------------------------------------------------------
 # vvv--------- UPDATE THE FOLLOWING SETTINGS TO MATCHING YOU CN INSTALLATION ----vvv
@@ -50,6 +53,7 @@ CYPHERNODE_ONION_URL=
 # ^^^ -----------------------------------------------------------------------------
 # ^^^ -----------------------------------------------------------------------------
 HERE
+fi
 }
 
 build_cn_app_ui
