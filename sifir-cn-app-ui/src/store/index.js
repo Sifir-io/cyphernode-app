@@ -13,11 +13,15 @@ const defaultState = () => ({
 export default new Vuex.Store({
   state: defaultState(),
   mutations: {
+    resetState(state) {
+      Object.assign(state, {
+        ...defaultState()
+      });
+    },
     setPairedDevices(state, pairedDevices) {
       state.pairedDevices = pairedDevices;
     },
     setSifirApiUrl(state, url) {
-      console.log("called with", url);
       Object.assign(state, {
         ...defaultState(),
         sifirApiUrl: url
