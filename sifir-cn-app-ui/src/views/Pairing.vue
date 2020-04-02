@@ -229,7 +229,8 @@ export default {
       "pairedDevices",
       "unlockedNodeDeviceId",
       "unlocked",
-      "nodes"
+      "nodes",
+      "sifirApiUrl"
     ]),
     valid() {
       return this.keyPassphrase.length > 6 && this.deviceId.length > 3;
@@ -279,12 +280,10 @@ export default {
         if (!this.tableSelectedDevice) return;
         const [{ pairingId, status }] = this.tableSelectedDevice;
         const newStatus = 1 - status;
-        await superagent
-          .post(`http://localhost:3009/setup/pairing/status`)
-          .send({
-            pairingId,
-            status: newStatus
-          });
+        await superagent.post(`${this.sifirApiUrl}/setup/pairing/status`).send({
+          pairingId,
+          status: newStatus
+        });
       } catch (err) {
         this.error = err;
       } finally {
@@ -311,12 +310,13 @@ export default {
         selectedConnector,
         keyPassphrase,
         unlockedNodeDeviceId,
+        sifirApiUrl,
         deviceId
       } = this;
       // register keys with sifir server
       if (selectedConnector == "matrix") {
         try {
-          await superagent.post(`http://localhost:3009/setup/sifir/user`).send({
+          await superagent.post(`${sifirApiUrl}/setup/sifir/user`).send({
             keyPassphrase,
             nodeDeviceId: unlockedNodeDeviceId
           });
@@ -332,7 +332,7 @@ export default {
         const {
           body: { b64token }
         } = await superagent
-          .post(`http://localhost:3009/pair/start/${selectedConnector}/json`)
+          .post(`${sifirApiUrl}/pair/start/${selectedConnector}/json`)
           .send({
             keyPassphrase,
             nodeDeviceId: unlockedNodeDeviceId,

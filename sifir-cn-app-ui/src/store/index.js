@@ -2,18 +2,26 @@ import Vue from "vue";
 import Vuex from "vuex";
 import agent from "superagent";
 Vue.use(Vuex);
-
+const defaultState = () => ({
+  token: "",
+  nodes: [],
+  sifirApiUrl: "http://localhost:3009",
+  unlocked: false,
+  unlockedNodeDeviceId: "",
+  pairedDevices: []
+});
 export default new Vuex.Store({
-  state: {
-    token: "",
-    nodes: [],
-    unlocked: false,
-    unlockedNodeDeviceId: "",
-    pairedDevices: []
-  },
+  state: defaultState(),
   mutations: {
     setPairedDevices(state, pairedDevices) {
       state.pairedDevices = pairedDevices;
+    },
+    setSifirApiUrl(state, url) {
+      console.log("called with", url);
+      Object.assign(state, {
+        ...defaultState(),
+        sifirApiUrl: url
+      });
     },
     setToken(state, token) {
       state.token = token;
@@ -29,12 +37,12 @@ export default new Vuex.Store({
   },
   actions: {
     async getNodeStatus(
-      { commit },
+      { commit, state: { sifirApiUrl } },
       { token = null, nodeDeviceId = null } = {}
     ) {
       const {
         body: { pairedDevices, devices, unlockedNodeDeviceId }
-      } = await agent.post(`http://localhost:3009/setup/status/`).send({
+      } = await agent.post(`${sifirApiUrl}/setup/status/`).send({
         nodeDeviceId: nodeDeviceId || undefined,
         token: token || undefined
       });
@@ -54,10 +62,13 @@ export default new Vuex.Store({
         commit("setPairedDevices", pairedDevices);
       }
     },
-    async unlockNode({ commit }, { keyPassphrase, nodeDeviceId }) {
+    async unlockNode(
+      { commit, state: { sifirApiUrl } },
+      { keyPassphrase, nodeDeviceId }
+    ) {
       const {
         body: { unlocked, token }
-      } = await agent.post(`http://localhost:3009/setup/keys/unlock`).send({
+      } = await agent.post(`${sifirApiUrl}/setup/keys/unlock`).send({
         keyPassphrase,
         nodeDeviceId
       });

@@ -30,7 +30,7 @@
         </v-flex>
       </template>
       <!-- Some nodes are setup but non are active-->
-      <template v-if="nodes.length && !unlockdeNodeDeviceId">
+      <template v-if="nodes.length && !unlockedNodeDeviceId">
         <node-unlock>
           <template v-slot:actions="unlockSlot">
             <v-alert
@@ -90,17 +90,21 @@
 
 <script>
 import NodeUnlock from "../components/NodeUnlock";
-import { mapState } from "vuex";
+import { mapState, mapActions } from "vuex";
 export default {
   name: "HelloWorld",
   components: { NodeUnlock },
   computed: {
-    ...mapState({
-      nodes: "nodes",
-      token: "token",
-      unlockdeNodeDeviceId: "unlockedNodeDeviceId",
-      unlocked: "unlocked"
-    })
+    ...mapState([
+      "nodes",
+      "token",
+      "unlockedNodeDeviceId",
+      "unlocked",
+      "sifirApiUrl"
+    ])
+  },
+  methods: {
+    ...mapActions(["setCyphernodeUrl"])
   },
   data: () => ({
     appLinks: [
@@ -116,7 +120,8 @@ export default {
     importantLinks: [
       {
         text: "Sifir.io Chat and Support",
-        href: "https://chat.sifir.io"
+        href:
+          "https://join.slack.com/t/sifirio/shared_invite/zt-b2rm2s5c-IGEo6_5hDPAhBHZIs~I9RQ"
       },
       {
         text: "Cyphernode Github",

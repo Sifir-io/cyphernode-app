@@ -18,8 +18,8 @@
       "
       color="yellow"
     >
-      <b>Attention</b>: Node `{{ unlockedNodeDeviceId }}` is currently active
-      and processing requests. <br />
+      <b>Attention</b>: Sifir API for `{{ unlockedNodeDeviceId }}` @
+      {{ sifirApiUrl }} is currently active and processing requests. <br />
       Sifir can only process requests for one unlocked node at a time, thus If
       you unlock another node, any requests coming devices paired to `{{
         unlockedNodeDeviceId
@@ -74,7 +74,13 @@ export default {
     error: null
   }),
   computed: {
-    ...mapState(["token", "unlockedNodeDeviceId", "unlocked", "nodes"]),
+    ...mapState([
+      "token",
+      "unlockedNodeDeviceId",
+      "unlocked",
+      "nodes",
+      "sifirApiUrl"
+    ]),
     ...mapGetters(["hasSetupNodes"]),
     valid() {
       return this.keyPassphrase.length > 6 && this.nodeDeviceId.length > 3;

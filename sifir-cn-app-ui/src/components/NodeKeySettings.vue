@@ -80,7 +80,13 @@ export default {
     publicKeyArmored: ""
   }),
   computed: {
-    ...mapState(["token", "unlockedNodeDeviceId", "unlocked", "nodes"]),
+    ...mapState([
+      "token",
+      "unlockedNodeDeviceId",
+      "unlocked",
+      "nodes",
+      "sifirApiUrl"
+    ]),
     valid() {
       return this.keyPassphrase.length > 6 && this.nodeDeviceId.length > 3;
     },
@@ -94,7 +100,7 @@ export default {
       try {
         const { keyPassphrase, nodeDeviceId } = this;
         const { body: keyGenBody } = await superagent
-          .post(`http://localhost:3009/setup/keys/gen`)
+          .post(`${this.sifirApiUrl}/setup/keys/gen`)
           .send({
             keyPassphrase,
             nodeDeviceId
