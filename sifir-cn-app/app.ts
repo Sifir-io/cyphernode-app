@@ -126,7 +126,5 @@ const initBridgesAndPairingApi = async () => {
   api.enableService("setup");
   api.app.listen(process.env.SIFIR_APP_API_PORT);
   registry.set("api", api);
-  debug(
-    "setup api is running, call /setup/unlock to unlock your node and start bridges"
-  );
+  debug("setup api is running, Ready to be unlocked.");
 })();

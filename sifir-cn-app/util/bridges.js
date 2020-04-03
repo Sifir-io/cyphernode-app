@@ -14,41 +14,52 @@ const events_1 = require("events");
 const cyphernode_js_sdk_transports_1 = require("cyphernode-js-sdk-transports");
 const cyphernode_js_sdk_1 = require("cyphernode-js-sdk");
 const msgMiddleWare_1 = require("./msgMiddleWare");
-const pairing_1 = require("./pairing");
+const sifirCommands_1 = require("./sifirCommands");
 const debug = require("debug")("sifir:bridgeUtil:");
 const sifirBridgeUtil = ({ nodeStore = stores_1.nodeStore, registry = _registry, bridge = new events_1.EventEmitter() } = {}) => {
-    const { parseSignedToken } = pairing_1.pairingUtil();
     const cnTransport = cyphernode_js_sdk_1.cypherNodeHttpTransport();
+    const { isSifirCommand, processSifirCommand } = sifirCommands_1.sifirCommands({
+        bridge,
+        registry,
+        transport: cnTransport
+    });
     const { getDevicePgpKeys, setDevicePgpKeys, getDeviceKeysByKeyId, getPairedDevicesByPrimaryDevice } = nodeStore();
-    const validatePairingEvent = async (pairingPayload) => {
-        const { token, key } = pairingPayload;
-        if (!token || !key) {
-            debug("Pairing request missing token or key");
-            return false;
-        }
-        const isValid = await parseSignedToken(token, key);
-        if (isValid !== true)
-            return false;
-        debug("Pairing request validated!");
-        const { deviceId, devicePubkey, nodeKeyId } = pairingPayload;
-        // TODO make this into Joi schema
-        if (!deviceId || !devicePubkey) {
-            debug("Valid paring request is missing deviceId or devicePubkey");
-            return false;
-        }
-        if (!nodeKeyId) {
-            debug("Node KeyId for pairing is missing");
-        }
-        const { pubKey, deviceId: nodeDeviceId } = await getDeviceKeysByKeyId(nodeKeyId);
-        if (nodeDeviceId !== registry.get("node-id")) {
-            debug("KeyId does not belong to node !", nodeDeviceId, registry.get("node_id"), pubKey);
-            return false;
-        }
-        // Pairing is legit : )
-        const pairingResp = { isValid: true, nodePubkey: pubKey };
-        bridge.emit(constants_1.pairingEvents.VALIDATED, { pairingPayload, pairingResp });
-        return pairingResp;
-    };
+    //  const validatePairingEvent = async pairingPayload => {
+    //    const { token, key } = pairingPayload;
+    //    if (!token || !key) {
+    //      debug("Pairing request missing token or key");
+    //      return false;
+    //    }
+    //    const isValid = await parseSignedToken(token, key);
+    //    if (isValid !== true) return false;
+    //
+    //    debug("Pairing request validated!");
+    //    const { deviceId, devicePubkey, nodeKeyId } = pairingPayload;
+    //    // TODO make this into Joi schema
+    //    if (!deviceId || !devicePubkey) {
+    //      debug("Valid paring request is missing deviceId or devicePubkey");
+    //      return false;
+    //    }
+    //    if (!nodeKeyId) {
+    //      debug("Node KeyId for pairing is missing");
+    //    }
+    //    const { pubKey, deviceId: nodeDeviceId } = await getDeviceKeysByKeyId(
+    //      nodeKeyId
+    //    );
+    //    if (nodeDeviceId !== registry.get("node-id")) {
+    //      debug(
+    //        "KeyId does not belong to node !",
+    //        nodeDeviceId,
+    //        registry.get("node_id"),
+    //        pubKey
+    //      );
+    //      return false;
+    //    }
+    //    // Pairing is legit : )
+    //    const pairingResp = { isValid: true, nodePubkey: pubKey };
+    //    bridge.emit(pairingEvents.VALIDATED, { pairingPayload, pairingResp });
+    //    return pairingResp;
+    //  };
     const setupSifirMatrixBridge = async ({ user, pass, inboundMiddleware, outboundMiddleware }) => {
         debug(`setting up sifir matrix bridge for ${user} : ${registry.get("node-id")}`);
         const client = await cyphernode_js_sdk_transports_1.getSyncMatrixClient({
@@ -91,15 +102,23 @@ const sifirBridgeUtil = ({ nodeStore = stores_1.nodeStore, registry = _registry,
             debug(`got command from ${source}`, command, method, nonce);
             try {
                 // intercep sifir commands here mainly for tor
-                if (["pairing-event", "sync"].includes(command)) {
+                //if (["pairing-event", "sync"].includes(command)) {
+                //  debug(`processing sifir-app command ${command}`);
+                //  const validationPayload = await validatePairingEvent(param);
+                //  if (!validationPayload) {
+                //    reply = { err: "Invalid pairing param" };
+                //  } else {
+                //    reply = { command, method, ...validationPayload };
+                //  }
+                //} else {
+                // SifirCommands Vs CN commands
+                if (isSifirCommand(command)) {
                     debug(`processing sifir-app command ${command}`);
-                    const validationPayload = await validatePairingEvent(param);
-                    if (!validationPayload) {
-                        reply = { err: "Invalid pairing param" };
-                    }
-                    else {
-                        reply = { command, method, ...validationPayload };
-                    }
+                    const commandResult = processSifirCommand(command, {
+                        ...param,
+                        isValidSign
+                    });
+                    reply = { command, method, ...commandResult };
                 }
                 else {
                     // cn command need to be signed
@@ -181,8 +200,7 @@ const sifirBridgeUtil = ({ nodeStore = stores_1.nodeStore, registry = _registry,
         setupAndStartBridges,
         setupSifirMatrixBridge,
         startCnCommandBridge,
-        setupTorBridge,
-        validatePairingEvent
+        setupTorBridge
     };
 };
 exports.sifirBridgeUtil = sifirBridgeUtil;
