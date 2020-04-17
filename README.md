@@ -23,15 +23,14 @@ Sifir is very much WIP.
 a. `CYPHERNODE_API_KEY` & `CYPHERNODE_API_KEY_ID` can be found :
 [PATH ON A TYPICAL INSTALL]
 
-a. Note: `CYPHERNODE_ONION_URL` , you need the URL *and* the Treafik port your Tor hidden service is running on in a typical cyphernode installation with Tor service enabled:
-#FIXME move to seperate scrippt
+a. Note: `CYPHERNODE_ONION_URL` , you need the URL *and* the Traefik port your Tor hidden service is running on in a typical cyphernode installation with Tor service enabled:
 ```bash
 CN_INSTALL_PATH="PATH TO YOUR CYPHERNODE INSTALL"
 # Firstline matching in $CN_INSTALL_PATH/dist/.cyphernodeconf/tor/torrc is http port
 onion_url_port=$(awk '/HiddenServicePort.*traefik/  {print $2;exit}' $CN_INSTALL_PATH/dist/.cyphernodeconf/tor/torrc )
 onion_url=$cat $CN_INSTALL_PATH/dist/.cyphernodeconf/tor/traefik/hidden_service/hostname
 echo "CYPHERNODE_ONION_URL=http://$onion_url:$onion_url_port"
-``
+```
 
 ** IMPORTANT** Do not forget to add Trafiks port number to your Onion URL 
 4. Run `./run.sh ~/cyphernode/dist/cyphernode/certs/cert.pem` replacing `~/cyphernode/dist/cyphernode/certs/cert.pem` with the path to Cyphernode's certifcate. 
