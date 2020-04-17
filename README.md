@@ -20,22 +20,39 @@ Sifir is very much WIP.
       - CYPHERNODE_API_KEY_ID=api key id from cyphernode
       - CYPHERNODE_ONION_URL=http://[cyphernode-traefik-torr-hiddenservice-hostname]:[traefik-hiddenservice-torr-port]
 ```
-   a. `CYPHERNODE_API_KEY` & `CYPHERNODE_API_KEY_ID` can be found :
-[PATH ON A TYPICAL INSTALL]
-   b. Note: `CYPHERNODE_ONION_URL` , you need the URL *and* the Traefik port your Tor hidden service is running on in a typical cyphernode installation with Tor service enabled:
-   	i. Your traefik hidden service hostname can be found: <path to installed cyphernode>/dist/.cyphernodeconf/tor/torrc )
-	ii. Your traefik hidden service port can found: <path to installed cyphernode>/dist/.cyphernodeconf/tor/traefik/hidden_service/hostname
-	    Firstline matching in $CN_INSTALL_PATH/dist/.cyphernodeconf/tor/torrc is http port
-or running the below commands should do the above for you:
-```bash
-EXPORT CN_INSTALL_PATH="PATH TO YOUR CYPHERNODE INSTALL"
-# Firstline matching in $CN_INSTALL_PATH/dist/.cyphernodeconf/tor/torrc is http port
-onion_url_port=$(awk '/HiddenServicePort.*traefik/  {print $2;exit}' $CN_INSTALL_PATH/dist/.cyphernodeconf/tor/torrc )
-onion_url=$cat $CN_INSTALL_PATH/dist/.cyphernodeconf/tor/traefik/hidden_service/hostname
-echo "CYPHERNODE_ONION_URL=http://$onion_url:$onion_url_port"
+### Getting `CYPHERNODE_API_KEY` , `CYPHERNODE_API_KEY_ID`:
+All the values you need can be obtained from your Cyphernode configuration file which can be viewed easily by:
+
+1. Login to your Cyphernode welcome portal
+2. Click 'Download your Cyphernode configurations, can be used for another Cyphernode deployment' and open the zip file (Enter your config password when prompted)
+3. Open `config.json` and look for the following value path in the json
+` gatekeeper_keys.gatekeeper_keys` the value would look something like `003=734f3b......b221e8a`, and so: 
+    - CYPHERNODE_API_KEY=734f3b......b221e8a (copy paste the entire string after the equality sign)
+    - CYPHERNODE_API_KEY_ID=003
+### Getting `CYPHERNODE_ONION_URL` (For TOR pairing only)
+
+`CYPHERNODE_ONION_URL`  Needs to contain Traefik hidden service URL *and* the port. In a typical cyphernode installation with Tor service it can easily be obtained by:
+1. Your traefik hidden service hostname can be found: <path to installed cyphernode>/dist/.cyphernodeconf/tor/torrc, ex:
+`a3209sdlakdoljkljsads.onion`
+2. Your traefik hidden service port can found: <path to installed cyphernode>/dist/.cyphernodeconf/tor/traefik/hidden_service/hostname , look for a line that looks like 
 ```
-4. Run `./run.sh ~/cyphernode/dist/cyphernode/certs/cert.pem` replacing `~/cyphernode/dist/cyphernode/certs/cert.pem` with the path to Cyphernode's certifcate. 
-_Note:_ If you have installed Cyphernode under a special user different than the one you login to your system with you might want to the `cert.pem` file from cyphernode's folder to the folder sifir app is installed under and point to it to prevent having to use sudo to access every time you want to run Sifir.
+HiddenServicePort 2768 traefik
+HiddenServicePort 2769 traefik
+```
+First line is your port number, so in this case `2768` and thus
+`CYPHERNODE_ONION_URL=http://a3209sdlakdoljkljsads.onion:2768`
+
+### Getting gatekeeper's SSL certifcate
+One last step is to give Sifir access to Cyphernode gatekeeper SSL certificate for https communication. The easiest way to do this is:
+1. Login to your Cyphernode welcome portal
+2. Click 'Download Client API ID's and keys, needed in your client apps' and open the zip file (Enter your config password when prompted)
+3. Copy `cacert.pem` to sifir app root directory
+
+Your now ready !
+
+## Running Sifir and Pairing with your phone
+1. Run `./run.sh` 
+_Note:_ The run script assumes you have placed `cacert.pem` in the same directory, if you have placed it in another path please providde the path to the certificate as a second parameter , ex `./run.sh ./path/to/ssl/cert.pem`
 
 ## Sifir setup and Pairing with mobile wallet
 
