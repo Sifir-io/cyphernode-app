@@ -57,6 +57,7 @@ _Note:_ The run script assumes you have placed `cacert.pem` in the same director
 ## Sifir setup and Pairing with mobile wallet
 
 1. Open your browser and go to 'http://localhost:3011' you should see Sifir App 
+2. If both Sifir bridge and  UI are installed on the same machine, click connect. Otherwise if you have installed the Sifir bridge on a rasberryPI or have multiple bridges installed thee edit the `URL where sifir is located` field to match the network machine where the bridge component of sifir has been installed.
 2. If this is a fresh install click 'Go To Setup'
 3. Enter a password to encrypt your PGP keys with (PGP keys will be used to sign and encrypt all communication coming in and out of Sifir), re-enter your password in the confirmation box.
 4. Click on 'Make Keys'
