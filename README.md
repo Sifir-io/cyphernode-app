@@ -1,10 +1,10 @@
 ![Sifir Logo](./docs/images/logo_onLightBG_tealLogo_darkText.png)
 
-# Cyphernode App and UI
-Runs as a Cyphernode app to securley bridge communciation between Cyphernode and Sifir mobile wallet.
+# Sifir Desktop App and UI
+Runs as on your computer/pi to securley bridge communciation between your Bitcoin and Lightning nodes (via Cyphernode) and the Sifir mobile app.
 
 ## :warning:  WARNING: ALPHA SOFTWARE :warning:
-Sifir is very much WIP and is meant for reckless Bitcoiners looking for a badass wallet. Plebs comeback later please.
+Sifir is very much WIP. 
 
 ## Requirements
 - Docker
@@ -18,8 +18,22 @@ Sifir is very much WIP and is meant for reckless Bitcoiners looking for a badass
 ```
       - CYPHERNODE_API_KEY=api key from cyphernode
       - CYPHERNODE_API_KEY_ID=api key id from cyphernode
-      - CYPHERNODE_ONION_URL=http://yourCyphernodeOnionUrl.onion
+      - CYPHERNODE_ONION_URL=http://[cyphernode-traefik-torr-hiddenservice-hostname]:[traefik-hiddenservice-torr-port]
 ```
+a. `CYPHERNODE_API_KEY` & `CYPHERNODE_API_KEY_ID` can be found :
+[PATH ON A TYPICAL INSTALL]
+
+a. Note: `CYPHERNODE_ONION_URL` , you need the URL *and* the Treafik port your Tor hidden service is running on in a typical cyphernode installation with Tor service enabled:
+#FIXME move to seperate scrippt
+```bash
+CN_INSTALL_PATH="PATH TO YOUR CYPHERNODE INSTALL"
+# Firstline matching in $CN_INSTALL_PATH/dist/.cyphernodeconf/tor/torrc is http port
+onion_url_port=$(awk '/HiddenServicePort.*traefik/  {print $2;exit}' $CN_INSTALL_PATH/dist/.cyphernodeconf/tor/torrc )
+onion_url=$cat $CN_INSTALL_PATH/dist/.cyphernodeconf/tor/traefik/hidden_service/hostname
+echo "CYPHERNODE_ONION_URL=http://$onion_url:$onion_url_port"
+``
+
+** IMPORTANT** Do not forget to add Trafiks port number to your Onion URL 
 4. Run `./run.sh ~/cyphernode/dist/cyphernode/certs/cert.pem` replacing `~/cyphernode/dist/cyphernode/certs/cert.pem` with the path to Cyphernode's certifcate. 
 _Note:_ If you have installed Cyphernode under a special user different than the one you login to your system with you might want to the `cert.pem` file from cyphernode's folder to the folder sifir app is installed under and point to it to prevent having to use sudo to access every time you want to run Sifir.
 
