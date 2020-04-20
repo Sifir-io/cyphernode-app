@@ -18,7 +18,7 @@ const {
   setupSifirMatrixBridge,
   startCnCommandBridge,
   setupTorBridge,
-  validatePairingEvent,
+  // validatePairingEvent,
   setupAndStartBridges
 } = sifirBridgeUtil({ bridge, registry });
 
@@ -67,7 +67,8 @@ const initBridgesAndPairingApi = async () => {
   });
 
   bridge.on(pairingEvents.RECIEVED, async pairingPayload => {
-    await validatePairingEvent(pairingPayload);
+    debug("FIXME app got pairing event but will do nothing for now ??");
+    // await validatePairingEvent(pairingPayload);
   });
   /**
    * Device has been validated/paired

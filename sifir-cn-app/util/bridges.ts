@@ -133,13 +133,14 @@ const sifirBridgeUtil = ({
           //} else {
           // SifirCommands Vs CN commands
           if (isSifirCommand(command)) {
-            debug(`processing sifir-app command ${command}`);
-            const commandResult = processSifirCommand(command, {
+            debug(`processing sifirCommand ${command}`);
+            const commandResult = await processSifirCommand(command, {
               ...param,
               isValidSign
             });
             reply = { command, method, ...commandResult };
           } else {
+            debug(`processing cnCommand ${command}`);
             // cn command need to be signed
             if (isValidSign !== true)
               throw "Invalid request signature, buting out";

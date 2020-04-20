@@ -20,7 +20,9 @@ const bridges_1 = require("./util/bridges");
 const debug = require("debug")("sifir:app");
 const bridge = new events_1.EventEmitter();
 const { getDevicePgpKeys, insertPairedDevice, setDevicePgpKeys, getPairedDevicesByPrimaryDevice } = stores_1.nodeStore();
-const { setupSifirMatrixBridge, startCnCommandBridge, setupTorBridge, validatePairingEvent, setupAndStartBridges } = bridges_1.sifirBridgeUtil({ bridge, registry });
+const { setupSifirMatrixBridge, startCnCommandBridge, setupTorBridge, 
+// validatePairingEvent,
+setupAndStartBridges } = bridges_1.sifirBridgeUtil({ bridge, registry });
 const initBridgesAndPairingApi = async () => {
     await setupAndStartBridges();
     const client = registry.get("matrix-client");
@@ -61,7 +63,8 @@ const initBridgesAndPairingApi = async () => {
         await initBridgesAndPairingApi();
     });
     bridge.on(constants_1.pairingEvents.RECIEVED, async (pairingPayload) => {
-        await validatePairingEvent(pairingPayload);
+        debug("FIXME app got pairing event but will do nothing for now ??");
+        // await validatePairingEvent(pairingPayload);
     });
     /**
      * Device has been validated/paired
