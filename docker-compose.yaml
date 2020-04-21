@@ -28,6 +28,7 @@ services:
       - SIFIR_SQLLITE_FILE=/data/sqlite/db.dat
       # - SIFIR_API_PAIRING_SECRET= # Generated at run time, or can be set statically here
       - SIFIR_API_PAIRING_KEY_EXPIRY=60000*5 # 5 mins expirty on pairing token
+      - BRIDGE_COMMAND_BROADCAST_TIMEOUT=9000
       - DEBUG=sifir*
     volumes:
       - ./sifir-cn-app/data/:/data
