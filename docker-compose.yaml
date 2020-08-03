@@ -15,14 +15,14 @@ services:
     environment:
       # ---- NO NEED TO EDIT ENV VARIABLES HERE, use .env file instead #
       - CYPHERNODE_API_KEY=${CYPHERNODE_API_KEY}
-      - CYPHERNODE_API_KEY_ID=${CYPHERNNODE_API_KEY_ID}
+      - CYPHERNODE_API_KEY_ID=${CYPHERNODE_API_KEY_ID}
       - CYPHERNODE_ONION_URL=${CYPHERNODE_ONION_URL}
       - CYPHERNODE_GATEKEEPER_CERT_CA=${CYPHERNODE_GATEKEEPER_CERT_CA}
       - CYPHER_GATEWAY_URL=https://gatekeeper:2009/v0/
       - SIFIR_APP_API_PORT=3009
       - SIFIR_APP_TOR_BRIDGE_PORT=3010
       # Endpoint used when pairing using Sifir sync service only
-      - SIFIR_PAIRING_SERVER=https://pairing.sifir.io
+      - SIFIR_PAIRING_SERVER=https://keys.sifir.io/legacy
       - SIFIR_SYNAPSE_HOMESERVER=matrix.sifir.io
       - SIFIR_SYNAPSE_HOMESERVER_URL=https://matrix.sifir.io
       - SIFIR_SQLLITE_FILE=/data/sqlite/db.dat
