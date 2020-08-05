@@ -138,7 +138,11 @@ const SifirSetup = async ({
       return;
     }
   });
-  // Only needed for sifir matrix service
+  /**
+   * Endpoint used to activate app's key with sifir sync ONLY if using sifir sync
+   * NOTE: This is very alpha right now and is provided as an alternative when TOR is not avalible
+   * Endpoints and flow are likley to change alot
+   */
   api.post("/sifir/user", async (req, res, next) => {
     const {
       value: { nodeDeviceId, keyPassphrase },
@@ -160,7 +164,7 @@ const SifirSetup = async ({
     // get nonce
     const {
       body: { sifirPubKey, nonce }
-    } = await agent.get(`${sifirServer}/register/keys`);
+    } = await agent.get(`${sifirServer}/legacy/register/keys`);
     const { token, key } = JSON.parse(
       Buffer.from(nonce, "base64").toString("utf8")
     );
@@ -207,7 +211,7 @@ const SifirSetup = async ({
       // send it off to get user nad pass
       const {
         body: { user }
-      } = await agent.post(`${sifirServer}/register/keys`).send({
+      } = await agent.post(`${sifirServer}/legacy/register/keys`).send({
         nonce,
         armoredPub64: Buffer.from(publicKeyArmored, "utf8").toString("base64"),
         passwordMain,

@@ -88,7 +88,7 @@ const SifirPairingApi = async ({ nodeStore = stores_1.nodeStore(), authUtil = pa
                     throw "Event type is poop";
             }
             const signedToken = await getSignedToken(pairingToken);
-            debug("generated new signedToken for pairing:", eventType, signedToken.token, signedToken.timestamp, signedToken.key.slice(-4));
+            debug("generated new signedToken for pairing:", eventType, signedToken.token, signedToken.key.slice(-4));
             const base64Token = Buffer.from(JSON.stringify({ ...signedToken })).toString("base64");
             switch (output) {
                 case "json":

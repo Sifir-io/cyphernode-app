@@ -118,7 +118,6 @@ const SifirPairingApi = async ({
         "generated new signedToken for pairing:",
         eventType,
         signedToken.token,
-        signedToken.timestamp,
         signedToken.key.slice(-4)
       );
       const base64Token = Buffer.from(

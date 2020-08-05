@@ -114,7 +114,11 @@ const SifirSetup = async ({ nodeStore = stores_1.nodeStore(), bridge = new event
             return;
         }
     });
-    // Only needed for sifir matrix service
+    /**
+     * Endpoint used to activate app's key with sifir sync ONLY if using sifir sync
+     * NOTE: This is very alpha right now and is provided as an alternative when TOR is not avalible
+     * Endpoints and flow are likley to change alot
+     */
     api.post("/sifir/user", async (req, res, next) => {
         const { value: { nodeDeviceId, keyPassphrase }, error } = stores_1.setupPayload.validate(req.body);
         if (error) {
@@ -130,7 +134,7 @@ const SifirSetup = async ({ nodeStore = stores_1.nodeStore(), bridge = new event
         }
         // Request user from id server
         // get nonce
-        const { body: { sifirPubKey, nonce } } = await superagent_1.default.get(`${sifirServer}/register/keys`);
+        const { body: { sifirPubKey, nonce } } = await superagent_1.default.get(`${sifirServer}/legacy/register/keys`);
         const { token, key } = JSON.parse(Buffer.from(nonce, "base64").toString("utf8"));
         try {
             // sign it wiht key to use as as proof of ownership of key
@@ -152,7 +156,7 @@ const SifirSetup = async ({ nodeStore = stores_1.nodeStore(), bridge = new event
             const passwordMain = crypto_1.pbkdf2Sync(keyPassphrase, saltMainAccount, 100000, 64, "sha512").toString("base64");
             const passwordDevices = crypto_1.pbkdf2Sync(keyPassphrase, saltDevicesAccount, 100000, 64, "sha512").toString("base64");
             // send it off to get user nad pass
-            const { body: { user } } = await superagent_1.default.post(`${sifirServer}/register/keys`).send({
+            const { body: { user } } = await superagent_1.default.post(`${sifirServer}/legacy/register/keys`).send({
                 nonce,
                 armoredPub64: Buffer.from(publicKeyArmored, "utf8").toString("base64"),
                 passwordMain,
