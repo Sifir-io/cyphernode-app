@@ -22,7 +22,7 @@ services:
       - SIFIR_APP_API_PORT=3009
       - SIFIR_APP_TOR_BRIDGE_PORT=3010
       # Endpoint used when pairing using Sifir sync service only
-      - SIFIR_PAIRING_SERVER=https://keys.sifir.io/legacy
+      - SIFIR_PAIRING_SERVER=https://keys.sifir.io
       - SIFIR_SYNAPSE_HOMESERVER=matrix.sifir.io
       - SIFIR_SYNAPSE_HOMESERVER_URL=https://matrix.sifir.io
       - SIFIR_SQLLITE_FILE=/data/sqlite/db.dat
